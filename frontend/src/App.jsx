@@ -1,37 +1,23 @@
-import { useEffect, useState } from "react";
-import { API_URL } from "./config";
-import { slotsOfDay, todayLocal, fmtDayFromLocal } from "./lib/dates";
+import { useSession } from "./hooks/useSession";
+import { useRoute } from "./lib/router";
+import Layout from "./components/Layout";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import PatientsPage from "./pages/PatientsPage";
+import PatientFormPage from "./pages/PatientFormPage";
 
 export default function App() {
-  const [online, setOnline] = useState(navigator.onLine);
+  const { status } = useSession();
+  const path = useRoute();
 
-  useEffect(() => {
-    const up = () => setOnline(true);
-    const down = () => setOnline(false);
-    window.addEventListener("online", up);
-    window.addEventListener("offline", down);
-    return () => {
-      window.removeEventListener("online", up);
-      window.removeEventListener("offline", down);
-    };
-  }, []);
+  if (status !== "active") return <LoginPage />;
 
-  const today = todayLocal();
-  return (
-    <main className="mx-auto max-w-md p-4">
-      <div
-        className={`rounded-lg px-3 py-2 text-sm font-medium text-white ${online ? "bg-emerald-600" : "bg-slate-600"}`}
-      >
-        {online ? "En ligne" : "Hors ligne"}
-      </div>
-      <h1 className="mt-4 text-xl font-bold text-teal-800">Suivi RDV - CSB</h1>
-      <p className="mt-2 text-slate-700">
-        Aujourd'hui : {fmtDayFromLocal(today)}
-      </p>
-      <p className="text-slate-700">
-        Créneaux par jour : {slotsOfDay(today).length}
-      </p>
-      <p className="mt-2 text-xs text-slate-500">API : {API_URL}</p>
-    </main>
-  );
+  const [, a, b] = path.split("/");
+  let page;
+  if (!a) page = <HomePage />;
+  else if (a === "patients" && !b) page = <PatientsPage />;
+  else if (a === "patients") page = <PatientFormPage key={b} id={b} />;
+  else page = <p>Page introuvable.</p>;
+
+  return <Layout path={path}>{page}</Layout>;
 }

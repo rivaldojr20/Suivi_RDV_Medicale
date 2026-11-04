@@ -43,5 +43,5 @@ export default defineConfig({
     }),
   ],
   server: { host: true }, // accessible depuis le réseau local
-  test: { environment: "node" },
+  test: { environment: "node", setupFiles: ["./src/test/setup.js"] },
 });
