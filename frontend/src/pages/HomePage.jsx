@@ -34,6 +34,12 @@ function opLabel(o) {
   if (o.entity === "appointments") return `${verb} d'un rendez-vous`;
   return `${verb} d'une note de consultation`;
 }
+const correctPath = (o) =>
+  o.entity === "patients"
+    ? `/patients/${o.record_id}`
+    : o.entity === "appointments"
+      ? `/rdv/a/${o.record_id}`
+      : `/rdv/a/${o.local.appointment_id}/note`;
 
 function FailedOps() {
   const failed = useLive(async () => {
@@ -76,10 +82,10 @@ function FailedOps() {
             Refusé : {describeError(o.last_error ?? {})}.
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {o.entity === "patients" && o.local && (
+            {o.local && (
               <button
                 className="rounded bg-blue-700 px-3 py-1 text-white"
-                onClick={() => navigate(`/patients/${o.record_id}`)}
+                onClick={() => navigate(correctPath(o))}
               >
                 Corriger
               </button>

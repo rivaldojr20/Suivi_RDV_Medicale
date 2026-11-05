@@ -5,6 +5,7 @@ import { useSyncStatus } from "../hooks/useSyncStatus";
 const TABS = [
   { seg: "", path: "/", label: "Accueil" },
   { seg: "patients", path: "/patients", label: "Patients" },
+  { seg: "rdv", path: "/rdv", label: "Rendez-vous" },
 ];
 
 function StatusBar() {
