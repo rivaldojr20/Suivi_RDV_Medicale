@@ -25,13 +25,14 @@ const EMPTY = { total: 0, items: [] };
 const input = "w-full rounded border p-2";
 const TIME_RE = /^\d{2}:\d{2}$/;
 
-function Field({ label, error, children }) {
+function Field({ label, error, children, group = false }) {
+  const Tag = group ? "div" : "label";
   return (
-    <label className="block text-sm">
+    <Tag className="block text-sm">
       <span className="mb-1 block font-medium">{label}</span>
       {children}
       {error && <span className="text-red-700">{error}</span>}
-    </label>
+    </Tag>
   );
 }
 
@@ -97,8 +98,9 @@ function PatientPicker({ value, onChange, locked }) {
         <button
           key={p.id}
           type="button"
+          onMouseDown={(e) => e.preventDefault()}
           onClick={() => onChange(p.id)}
-          className="block w-full rounded border bg-white p-2 text-left text-sm"
+          className="block w-full touch-manipulation rounded border bg-white p-3 text-left text-sm active:bg-blue-50"
         >
           <PatientName p={p} />
           <span className="text-slate-500">
@@ -222,7 +224,7 @@ function AppointmentForm({ appt, day, time, practitionerId }) {
         {isNew ? "Nouveau rendez-vous" : "Modifier le rendez-vous"}
       </h1>
 
-      <Field label="Patient *" error={errors.patient}>
+      <Field label="Patient *" error={errors.patient} group>
         <PatientPicker
           value={f.patient_id}
           locked={!isNew}

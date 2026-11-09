@@ -9,7 +9,7 @@ import { retryOp, abandonOp } from "../db/outbox";
 import { getSession, saveSession } from "../api/session";
 import { navigate } from "../lib/router";
 import { fmtDateTime, roleLabel } from "../lib/format";
-
+import AppInfo from "../components/AppInfo";
 const RESULT_MSG = {
   offline:
     "Serveur injoignable. Vos données sont conservées et seront envoyées plus tard.",
@@ -198,7 +198,7 @@ export default function HomePage() {
 
       <FailedOps />
       <Notices />
-
+      <AppInfo />
       <button
         onClick={onLogout}
         className="w-full rounded border border-slate-400 p-2 text-sm"

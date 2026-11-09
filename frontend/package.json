@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:tunnel": "vite build --mode tunnel"
   },
   "dependencies": {
     "dexie": "^4.4.7",
